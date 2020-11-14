@@ -1,4 +1,4 @@
-import Spinner from './spinner';
-import './spinner.scss';
+import ErrorIndicator from './error_indicator';
+import './error_indicator.scss';
 
-export default Spinner;
+export default ErrorIndicator;

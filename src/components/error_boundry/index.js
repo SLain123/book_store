@@ -1,4 +1,3 @@
-import Spinner from './spinner';
-import './spinner.scss';
+import ErrorBoundry from './error_boundry';
 
-export default Spinner;
+export default ErrorBoundry;
