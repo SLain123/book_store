@@ -1,5 +1,5 @@
 const CrashTest = () => {
-    throw new Error('Crash!')
-}
+    throw new Error('Crash!');
+};
 
 export default CrashTest;

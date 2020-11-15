@@ -11,7 +11,7 @@ const Spinner = () => {
             <div className='spinner mauve'></div>
             <div className='spinner light-yellow'></div>
         </div>
-    )
-}
+    );
+};
 
 export default Spinner;

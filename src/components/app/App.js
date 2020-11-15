@@ -1,19 +1,15 @@
-import React from "react";
-import Spinner from "../spinner";
-import ErrorBoundry from "../error_boundry";
-import { BookstoreServiceProvider } from "../bookstore_service_context";
-// import withBookstoreServiceConsumer from "../../HOC/withConsumer";
+import React from 'react';
+import Spinner from '../spinner';
+import withBookstoreServiceConsumer from "../../HOC";
 // import Test from "../../utils/crashTest";
 
-const App = () => {
-  return (
-    <ErrorBoundry>
-      <BookstoreServiceProvider>
-        <p>app</p>
-        <Spinner />
-      </BookstoreServiceProvider>
-    </ErrorBoundry>
-  );
+const App = ({bookstoreService}) => {
+    return (
+        <>
+            <p>{bookstoreService}</p>
+            <Spinner />
+        </>
+    );
 };
 
-export default App;
+export default withBookstoreServiceConsumer(App);

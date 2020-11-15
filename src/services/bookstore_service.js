@@ -1,7 +1,7 @@
 class BookstoreService {
-  getBooks() {
-    return ["aladin", "sim sim"];
-  }
+    getBooks() {
+        return ['aladin', 'sim sim'];
+    }
 }
 
 export default BookstoreService;
