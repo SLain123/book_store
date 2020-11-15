@@ -1,3 +1,3 @@
-import {Provider, Consumer} from './bookstore_service_context';
+import {BookstoreServiceProvider, BookstoreServiceConsumer} from './bookstore_service_context';
 
-export {Provider, Consumer};
+export {BookstoreServiceProvider, BookstoreServiceConsumer};
