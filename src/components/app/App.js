@@ -1,15 +1,33 @@
 import React from 'react';
-import Spinner from '../spinner';
-import withBookstoreServiceConsumer from "../../HOC";
+import { Switch, Route, Link } from 'react-router-dom';
+
+import BookList from '../book_list';
 // import Test from "../../utils/crashTest";
 
-const App = ({bookstoreService}) => {
+const App = () => {
     return (
         <>
-            <p>{bookstoreService}</p>
-            <Spinner />
+            <header>
+                <nav>
+                    <Link to='/'>Home</Link>
+                    <Link to='/card/'>Card</Link>
+                </nav>
+            </header>
+            <Switch>
+                <Route
+                    exact
+                    path='/'
+                    component={BookList}
+                />
+                <Route
+                    path='/card'
+                    render={() => {
+                       return <p>Card</p>;
+                    }}
+                />
+            </Switch>
         </>
     );
 };
 
-export default withBookstoreServiceConsumer(App);
+export default App;

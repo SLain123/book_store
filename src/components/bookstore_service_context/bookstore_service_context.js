@@ -5,7 +5,7 @@ const { Provider, Consumer } = React.createContext();
 const BookstoreServiceProvider = (props) => {
     const bookstoreData = new BookstoreService();
     return (
-        <Provider value={bookstoreData.getBooks()}>{props.children}</Provider>
+        <Provider value={bookstoreData}>{props.children}</Provider>
     );
 };
 
