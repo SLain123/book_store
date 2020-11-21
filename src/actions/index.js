@@ -5,4 +5,17 @@ const booksLoadedToStore = (newBooks) => {
     };
 };
 
-export { booksLoadedToStore };
+const booksRequest = () => {
+    return {
+        type: 'BOOKS_REQUEST',
+    };
+};
+
+const booksError = (error) => {
+    return {
+        type: 'BOOKS_ERROR',
+        payload: error,
+    };
+};
+
+export { booksLoadedToStore, booksRequest, booksError };

@@ -93,7 +93,16 @@ class BookstoreService {
     getBooks() {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve(data);
+                const random = Math.random();
+                if (random < 0.9) {
+                    resolve(data);
+                } else {
+                    reject(
+                        new Error(
+                            'Что-то сломалось, книги не были загружены...',
+                        ),
+                    );
+                }
             }, 1000);
         });
     }
