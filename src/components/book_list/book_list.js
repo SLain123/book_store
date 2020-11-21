@@ -3,17 +3,24 @@ import { connect } from 'react-redux';
 
 import withBookstoreServiceConsumer from '../../HOC';
 import { booksLoadedToStore } from '../../actions';
+import Spinner from '../spinner';
 
 import './book_list.scss';
 
 class BookList extends Component {
     componentDidMount() {
-        const data = this.props.bookstoreService.getBooks();
-        this.props.booksLoadedToStore(data);
+        const { bookstoreService, booksLoadedToStore } = this.props;
+        bookstoreService.getBooks().then((data) => {
+            booksLoadedToStore(data);
+        });
     }
 
     render() {
         const booksData = this.props.books;
+
+        if(this.props.loading) {
+            return <Spinner />
+        }
 
         return (
             <section>
@@ -76,9 +83,10 @@ class BookList extends Component {
     }
 }
 
-const mapStateToProps = ({ books }) => {
+const mapStateToProps = ({ books, loading }) => {
     return {
         books,
+        loading,
     };
 };
 

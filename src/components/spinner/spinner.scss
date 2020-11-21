@@ -1,4 +1,12 @@
-$width: 70px; $height: $width; $border: 20px; $duration: 1.1s; $repetition: infinite;
+$width: 80px; $height: $width; $border: 8px; $duration: 1.1s; $repetition: infinite;
+
+.spinner__block {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -100px;
+  margin-top: -75px;
+}
 
 .loader {
   display: block;
@@ -7,9 +15,11 @@ $width: 70px; $height: $width; $border: 20px; $duration: 1.1s; $repetition: infi
   position: relative;
   transform-origin: ($width+$border)/2  ($height+$border)/2;
   animation: spin $duration $repetition linear;
-  
+
   .spinner {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 100%;
     border-radius: 50%;
