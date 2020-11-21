@@ -1,8 +1,8 @@
-const booksLoaded = (newBooks) => {
+const booksLoadedToStore = (newBooks) => {
     return {
-        type: 'BOOKS_LOADED',
+        type: 'BOOKS_LOADED_TO_STORE',
         payload: newBooks,
     };
 };
 
-export { booksLoaded };
+export { booksLoadedToStore };
