@@ -6,6 +6,12 @@
         padding: 40px 5px;
     }
 
+    &__info-container {
+        display: flex;
+        flex-flow: column;
+        justify-content: space-evenly;
+    }
+
     &__img {
         margin-right: 20px;
     }
@@ -22,6 +28,10 @@
     &__price {
         font-size: 18px;
         font-weight: 700;
+    }
+
+    &__add-btn {
+        max-width: 180px;
     }
 
 }

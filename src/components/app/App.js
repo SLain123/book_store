@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import Header from '../header';
 import BookList from '../book_list';
+import Cart from '../cart';
 
 const App = () => {
     return (
@@ -11,12 +12,7 @@ const App = () => {
 
             <Switch>
                 <Route exact path='/' component={BookList} />
-                <Route
-                    path='/card'
-                    render={() => {
-                        return <p>Card</p>;
-                    }}
-                />
+                <Route path='/card' component={Cart} />
             </Switch>
         </div>
     );
