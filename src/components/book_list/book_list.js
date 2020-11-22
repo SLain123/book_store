@@ -10,22 +10,7 @@ import './book_list.scss';
 
 class BookList extends Component {
     componentDidMount() {
-        const {
-            bookstoreService,
-            booksLoadedToStore,
-            booksRequest,
-            booksError,
-        } = this.props;
-
-        booksRequest();
-        bookstoreService
-            .getBooks()
-            .then((data) => {
-                booksLoadedToStore(data);
-            })
-            .catch((err) => {
-                booksError(err);
-            });
+        this.props.downloadBooks();
     }
 
     render() {
@@ -108,13 +93,24 @@ const mapStateToProps = ({ books, loading, error }) => {
     };
 };
 
-const mapDispatchToProps = {
-    booksLoadedToStore,
-    booksRequest,
-    booksError,
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        downloadBooks: () => {
+            const { bookstoreService } = ownProps;
+
+            dispatch(booksRequest());
+            bookstoreService
+                .getBooks()
+                .then((data) => {
+                    dispatch(booksLoadedToStore(data));
+                })
+                .catch((err) => {
+                    dispatch(booksError(err));
+                });
+        },
+    };
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(withBookstoreServiceConsumer(BookList));
+export default withBookstoreServiceConsumer(
+    connect(mapStateToProps, mapDispatchToProps)(BookList),
+);
