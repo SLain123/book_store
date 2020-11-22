@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import withBookstoreServiceConsumer from '../../HOC';
-import { booksLoadedToStore, booksRequest, booksError } from '../../actions';
+import { downloadBooks } from '../../actions';
 import Spinner from '../spinner';
 import ErrorIndicator from '../error_indicator';
 
@@ -95,19 +95,7 @@ const mapStateToProps = ({ books, loading, error }) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        downloadBooks: () => {
-            const { bookstoreService } = ownProps;
-
-            dispatch(booksRequest());
-            bookstoreService
-                .getBooks()
-                .then((data) => {
-                    dispatch(booksLoadedToStore(data));
-                })
-                .catch((err) => {
-                    dispatch(booksError(err));
-                });
-        },
+        downloadBooks: downloadBooks(ownProps.bookstoreService, dispatch),
     };
 };
 
