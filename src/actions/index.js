@@ -18,6 +18,13 @@ const booksLoadedFailure = (error) => {
     };
 };
 
+const addItem = (id) => {
+    return {
+        type: 'ADD_ITEM',
+        id,
+    };
+};
+
 const decreaseItem = (id) => {
     return {
         type: 'DECREASE_ITEM_COUNT',
@@ -51,4 +58,4 @@ const downloadBooks = (bookstoreService, dispatch) => () => {
         });
 };
 
-export { downloadBooks, decreaseItem, increaseItem, removeItem };
+export { downloadBooks, addItem, decreaseItem, increaseItem, removeItem };

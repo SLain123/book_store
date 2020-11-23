@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import withBookstoreServiceConsumer from '../../HOC';
-import { downloadBooks } from '../../actions';
+import { downloadBooks, addItem } from '../../actions';
 import Spinner from '../spinner';
 import ErrorIndicator from '../error_indicator';
 
 import './book_list.scss';
 
-const BookList = ({ books }) => {
+const BookList = ({ books, onAddedBookToCart }) => {
     return (
         <section>
             <ul className='book-list row'>
@@ -52,6 +52,7 @@ const BookList = ({ books }) => {
                                         {price} руб.
                                     </p>
                                     <button
+                                        onClick={() => onAddedBookToCart(id)}
                                         type='button'
                                         className='book-list__add-btn btn btn-info'
                                     >
@@ -73,7 +74,7 @@ class BookListContainer extends Component {
     }
 
     render() {
-        const { books, loading, error } = this.props;
+        const { books, loading, error, onAddedBookToCart } = this.props;
 
         if (loading) {
             return <Spinner />;
@@ -83,7 +84,7 @@ class BookListContainer extends Component {
             return <ErrorIndicator />;
         }
 
-        return <BookList books={books} />;
+        return <BookList books={books} onAddedBookToCart={onAddedBookToCart} />;
     }
 }
 
@@ -98,6 +99,7 @@ const mapStateToProps = ({ books, loading, error }) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         downloadBooks: downloadBooks(ownProps.bookstoreService, dispatch),
+        onAddedBookToCart: (id) => dispatch(addItem(id)),
     };
 };
 
