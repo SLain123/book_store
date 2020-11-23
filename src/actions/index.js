@@ -18,6 +18,27 @@ const booksLoadedFailure = (error) => {
     };
 };
 
+const decreaseItem = (id) => {
+    return {
+        type: 'DECREASE_ITEM_COUNT',
+        id,
+    };
+};
+
+const increaseItem = (id) => {
+    return {
+        type: 'INCREASE_ITEM_COUNT',
+        id,
+    };
+};
+
+const removeItem = (id) => {
+    return {
+        type: 'REMOVE_ITEM',
+        id,
+    };
+};
+
 const downloadBooks = (bookstoreService, dispatch) => () => {
     dispatch(booksLoad());
     bookstoreService
@@ -30,4 +51,4 @@ const downloadBooks = (bookstoreService, dispatch) => () => {
         });
 };
 
-export { downloadBooks };
+export { downloadBooks, decreaseItem, increaseItem, removeItem };
