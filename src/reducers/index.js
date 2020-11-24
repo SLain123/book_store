@@ -6,14 +6,22 @@ const initialState = {
     total: 500,
 };
 
-const isDouble = (booksFromCart, selectBookId) => {
-    let result = false;
-    booksFromCart.forEach(({ id }) => {
-        if (id === selectBookId) {
-            result = true;
-        }
-    });
-    return result;
+const addExistItem = (state, selectBook, index) => {
+    return {
+        id: selectBook.id,
+        titleBook: selectBook.title,
+        countBook: state.cartItems[index].countBook + 1,
+        totalPrice: state.cartItems[index].totalPrice + selectBook.price,
+    };
+};
+
+const addNewItem = (selectBook) => {
+    return {
+        id: selectBook.id,
+        titleBook: selectBook.title,
+        countBook: 1,
+        totalPrice: selectBook.price,
+    };
 };
 
 const reducer = (state = initialState, action) => {
@@ -45,36 +53,21 @@ const reducer = (state = initialState, action) => {
         case 'ADD_ITEM': {
             const selectBook = state.books.find(({ id }) => id === action.id);
             const items = state.cartItems;
-            const dataForCart = {
-                id: selectBook.id,
-                titleBook: selectBook.title,
-                totalPrice: selectBook.price,
-            };
+            const index = items.findIndex(({ id }) => id === action.id);
 
-            if (isDouble(state.cartItems, selectBook.id)) {
-                let indx;
-                items.forEach((item, i) => {
-                    if (item.id === action.id) {
-                        indx = i;
-                    }
-                });
-
-                dataForCart.countBook = state.cartItems[indx].countBook + 1;
-
+            if (index !== -1) {
                 return {
                     ...state,
                     cartItems: [
-                        ...items.slice(0, indx),
-                        dataForCart,
-                        ...items.slice(indx + 1),
+                        ...items.slice(0, index),
+                        addExistItem(state, selectBook, index),
+                        ...items.slice(index + 1),
                     ],
                 };
             } else {
-                dataForCart.countBook = 1;
-
                 return {
                     ...state,
-                    cartItems: [...state.cartItems, dataForCart],
+                    cartItems: [...state.cartItems, addNewItem(selectBook)],
                 };
             }
         }
