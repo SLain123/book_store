@@ -6,7 +6,15 @@ const initialState = {
     total: 500,
 };
 
-const changeExistItem = (state, selectBook, index, opt = 'minus') => {
+//---------------------------------------------------------------------------
+//Функци для формирования item;
+//--------------------------------------------------------------------------
+
+// Под-функция для изменения содержимого уже добавленного ранее в корзину item; 
+// Может прибавлять или отнимать значение количества через переданный аргумент opt: plus & minus;
+
+const changeExistItem = (state, actionId, index, opt) => {
+    const selectBook = state.books.find(({ id }) => id === actionId);
     const item = {
         id: selectBook.id,
         titleBook: selectBook.title,
@@ -21,7 +29,10 @@ const changeExistItem = (state, selectBook, index, opt = 'minus') => {
     return item;
 };
 
-const addNewItem = (selectBook) => {
+// Под-функция для создания нового item которого еще нет в корзине;
+
+const createNewItem = (state, actionId) => {
+    const selectBook = state.books.find(({ id }) => id === actionId);
     return {
         id: selectBook.id,
         titleBook: selectBook.title,
@@ -29,6 +40,48 @@ const addNewItem = (selectBook) => {
         totalPrice: selectBook.price,
     };
 };
+
+// -----------------------------------------------------------------
+// Функции для работы непосредственно в направлении state: add, change, remove;
+//------------------------------------------------------------------
+
+// Функция добавляет новый item ---> state;
+
+const addItemToState = (state, actionId) => {
+    return {
+        ...state,
+        cartItems: [...state.cartItems, createNewItem(state, actionId)],
+    };
+};
+
+// Функция добавляет измененный item на зарезервированное им место в массиве cartItems в state;
+
+const changeItemInState = (state, index, actionId, opt) => {
+    return {
+        ...state,
+        cartItems: [
+            ...state.cartItems.slice(0, index),
+            changeExistItem(state, actionId, index, opt),
+            ...state.cartItems.slice(index + 1),
+        ],
+    };
+};
+
+// Функция удаляет нужный item from state;
+
+const removeItemToState = (state, index) => {
+    return {
+        ...state,
+        cartItems: [
+            ...state.cartItems.slice(0, index),
+            ...state.cartItems.slice(index + 1),
+        ],
+    };
+};
+
+//---------------------------------------------
+// REDUCER;
+//---------------------------------------------
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -57,74 +110,40 @@ const reducer = (state = initialState, action) => {
             };
         }
         case 'ADD_ITEM': {
-            const selectBook = state.books.find(({ id }) => id === action.id);
-            const items = state.cartItems;
-            const index = items.findIndex(({ id }) => id === action.id);
+            const index = state.cartItems.findIndex(
+                ({ id }) => id === action.id,
+            );
 
             if (index !== -1) {
-                return {
-                    ...state,
-                    cartItems: [
-                        ...items.slice(0, index),
-                        changeExistItem(state, selectBook, index, 'plus'),
-                        ...items.slice(index + 1),
-                    ],
-                };
+                return changeItemInState(state, index, action.id, 'plus');
             } else {
-                return {
-                    ...state,
-                    cartItems: [...state.cartItems, addNewItem(selectBook)],
-                };
+                return addItemToState(state, action.id);
             }
         }
         case 'DECREASE_ITEM_COUNT': {
-            const selectBook = state.books.find(({ id }) => id === action.id);
-            const items = state.cartItems;
-            const index = items.findIndex(({ id }) => id === action.id);
+            const index = state.cartItems.findIndex(
+                ({ id }) => id === action.id,
+            );
 
             if (state.cartItems[index].countBook === 1) {
-                return {
-                    ...state,
-                    cartItems: [
-                        ...items.slice(0, index),
-                        ...items.slice(index + 1),
-                    ],
-                };
-            }
-            else {
-                return {
-                    ...state,
-                    cartItems: [
-                        ...items.slice(0, index),
-                        changeExistItem(state, selectBook, index),
-                        ...items.slice(index + 1),
-                    ],
-                };
+                return removeItemToState(state, index);
+            } else {
+                return changeItemInState(state, index, action.id, 'minus');
             }
         }
         case 'INCREASE_ITEM_COUNT': {
-            const selectBook = state.books.find(({ id }) => id === action.id);
-            const items = state.cartItems;
-            const index = items.findIndex(({ id }) => id === action.id);
-            return {
-                ...state,
-                cartItems: [
-                    ...items.slice(0, index),
-                    changeExistItem(state, selectBook, index, 'plus'),
-                    ...items.slice(index + 1),
-                ],
-            };
+            const index = state.cartItems.findIndex(
+                ({ id }) => id === action.id,
+            );
+
+            return changeItemInState(state, index, action.id, 'plus');
         }
         case 'REMOVE_ITEM': {
-            const items = state.cartItems;
-            const index = items.findIndex(({ id }) => id === action.id);
-            return {
-                ...state,
-                cartItems: [
-                    ...items.slice(0, index),
-                    ...items.slice(index + 1),
-                ],
-            };
+            const index = state.cartItems.findIndex(
+                ({ id }) => id === action.id,
+            );
+
+            return removeItemToState(state, index);
         }
         default:
             return state;
