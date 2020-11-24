@@ -6,13 +6,19 @@ const initialState = {
     total: 500,
 };
 
-const addExistItem = (state, selectBook, index) => {
-    return {
+const changeExistItem = (state, selectBook, index, opt = 'minus') => {
+    const item = {
         id: selectBook.id,
         titleBook: selectBook.title,
-        countBook: state.cartItems[index].countBook + 1,
-        totalPrice: state.cartItems[index].totalPrice + selectBook.price,
     };
+    if (opt === 'plus') {
+        item.countBook = state.cartItems[index].countBook + 1;
+        item.totalPrice = state.cartItems[index].totalPrice + selectBook.price;
+    } else {
+        item.countBook = state.cartItems[index].countBook - 1;
+        item.totalPrice = state.cartItems[index].totalPrice - selectBook.price;
+    }
+    return item;
 };
 
 const addNewItem = (selectBook) => {
@@ -60,7 +66,7 @@ const reducer = (state = initialState, action) => {
                     ...state,
                     cartItems: [
                         ...items.slice(0, index),
-                        addExistItem(state, selectBook, index),
+                        changeExistItem(state, selectBook, index, 'plus'),
                         ...items.slice(index + 1),
                     ],
                 };
@@ -72,21 +78,52 @@ const reducer = (state = initialState, action) => {
             }
         }
         case 'DECREASE_ITEM_COUNT': {
-            console.log(action.id);
-            return {
-                ...state,
-            };
+            const selectBook = state.books.find(({ id }) => id === action.id);
+            const items = state.cartItems;
+            const index = items.findIndex(({ id }) => id === action.id);
+
+            if (state.cartItems[index].countBook === 1) {
+                return {
+                    ...state,
+                    cartItems: [
+                        ...items.slice(0, index),
+                        ...items.slice(index + 1),
+                    ],
+                };
+            }
+            else {
+                return {
+                    ...state,
+                    cartItems: [
+                        ...items.slice(0, index),
+                        changeExistItem(state, selectBook, index),
+                        ...items.slice(index + 1),
+                    ],
+                };
+            }
         }
         case 'INCREASE_ITEM_COUNT': {
-            console.log(action.id);
+            const selectBook = state.books.find(({ id }) => id === action.id);
+            const items = state.cartItems;
+            const index = items.findIndex(({ id }) => id === action.id);
             return {
                 ...state,
+                cartItems: [
+                    ...items.slice(0, index),
+                    changeExistItem(state, selectBook, index, 'plus'),
+                    ...items.slice(index + 1),
+                ],
             };
         }
         case 'REMOVE_ITEM': {
-            console.log(action.id);
+            const items = state.cartItems;
+            const index = items.findIndex(({ id }) => id === action.id);
             return {
                 ...state,
+                cartItems: [
+                    ...items.slice(0, index),
+                    ...items.slice(index + 1),
+                ],
             };
         }
         default:
