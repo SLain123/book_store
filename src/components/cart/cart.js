@@ -111,10 +111,10 @@ const TableRaw = ({ book, indx, decrease, increase, remove }) => {
     );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({cartData}) => {
     return {
-        cartItems: state.cartItems,
-        total: state.total,
+        cartItems: cartData.cartItems,
+        total: cartData.total,
     };
 };
 
