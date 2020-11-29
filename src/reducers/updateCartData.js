@@ -1,7 +1,7 @@
 const createEditRemoveItemToState = (state, actionId, count) => {
     const {
         bookList: { books },
-        cartData: { cartItems },
+        cartData: { cartItems, total },
     } = state;
     const selectBook = books.find(({ id }) => id === actionId);
     const index = cartItems.findIndex(({ id }) => id === actionId);
@@ -10,7 +10,7 @@ const createEditRemoveItemToState = (state, actionId, count) => {
         titleBook: selectBook.title,
     };
 
-    if (index !== -1) {
+    if (index !== -1) { 
         item.countBook = cartItems[index].countBook + count;
         item.totalPrice =
             cartItems[index].totalPrice + count * selectBook.price;
@@ -21,25 +21,25 @@ const createEditRemoveItemToState = (state, actionId, count) => {
                     ...cartItems.slice(0, index),
                     ...cartItems.slice(index + 1),
                 ],
-                total: 0
+                total: total + (selectBook.price * count),
             };
         }
 
-        return {
+        return { 
             cartItems: [
                 ...cartItems.slice(0, index),
                 item,
                 ...cartItems.slice(index + 1),
             ],
-            total: 0
+            total: total + (selectBook.price * count),
         };
-    } else {
+    } else {   
         item.countBook = 1;
         item.totalPrice = selectBook.price;
 
         return {
             cartItems: [...cartItems, item],
-            total: 0
+            total: total + selectBook.price,
         };
     }
 };
@@ -48,7 +48,7 @@ const updateCartData = (state, action) => {
     if (state === undefined) {
         return {
             cartItems: [],
-            total: 500,
+            total: 0,
         };
     }
 
