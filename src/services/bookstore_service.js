@@ -94,7 +94,7 @@ class BookstoreService {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 const random = Math.random();
-                if (random < 0.9) {
+                if (random < 1) {  // оставить для тестов сервиса;
                     resolve(data);
                 } else {
                     reject(
